@@ -1,0 +1,411 @@
+/* --- 웹폰트 설정 --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Noto+Sans+KR:wght@400;700&display=swap');
+
+/* --- 전역 변수 --- */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #FFC107;
+    --background-light: #e8f5e9;
+    --card-background: #d0e8d0; 
+    --border-color: #c0d8c0;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --text-dark: #212121;
+    --text-medium: #424242;
+    --text-light: #757575;
+}
+
+body {
+    font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden; 
+    box-sizing: border-box;
+}
+
+/* --- 화면 전환 (공통) --- */
+.screen {
+    width: 100%;
+    height: 100vh; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    background-color: var(--background-light);
+}
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+/* --- 1. 오프닝 스플래시 화면 --- */
+#splash-screen {
+    background: linear-gradient(135deg, #a7c7ed 0%, #3080d0 100%);
+    color: #fff;
+    justify-content: center;
+    z-index: 999;
+}
+.splash-content {
+    text-align: center;
+}
+.splash-content h1 {
+    font-size: 4em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    opacity: 0; 
+    animation: fadeInUp 0.8s ease-out forwards; 
+    animation-delay: 0.1s;
+}
+.splash-content p {
+    font-size: 1.5em;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-delay: 0.3s; 
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-delay: 0.5s; 
+}
+
+.btn-primary, .btn-news {
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 250px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.btn-primary {
+    background-color: var(--secondary-color);
+    color: var(--text-dark);
+}
+.btn-primary:hover {
+    background-color: #ffda6a;
+    transform: translateY(-3px) scale(1.05); 
+}
+.btn-news {
+    background-color: #fff;
+    color: #3080d0;
+}
+.btn-news:hover {
+    background-color: #f0f8ff;
+    transform: translateY(-3px) scale(1.05);
+}
+
+.dev-info-link {
+    display: block; margin-top: 30px; color: #ffffff;
+    font-size: 0.9em; text-decoration: underline; 
+    opacity: 0; animation: fadeInUp 0.8s ease-out forwards; animation-delay: 0.7s;
+    transition: transform 0.2s; 
+}
+.dev-info-link:hover { transform: scale(1.1); }
+
+
+/* --- 2. 대시보드 화면 스타일 --- */
+#dashboard-screen {
+    padding: 20px;
+}
+
+.dashboard-layout {
+    display: flex;
+    flex-direction: row; 
+    align-items: stretch;
+    width: 100%;
+    max-width: 1600px;
+    gap: 30px;
+    height: 100%; 
+    max-height: calc(100vh - 40px);
+    margin-top: 40px;
+}
+
+.left-column {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.right-column {
+    flex: 2;
+    min-width: 0;
+    height: 100%; 
+    overflow-y: auto;
+    padding-right: 10px; 
+}
+
+/* 홈으로 가기 버튼 */
+.btn-home {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 100;
+    transition: background-color 0.3s;
+}
+.btn-home:hover {
+    background-color: #555;
+}
+
+/* 차트 컨테이너 */
+.chart-container {
+    background-color: var(--card-background);
+    padding: 20px 20px 40px 20px; 
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    margin-bottom: 30px;
+    position: relative;
+    flex-shrink: 0;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.chart-container canvas {
+    max-height: 100% !important;
+    width: 100% !important;
+}
+
+/* 영화 그리드 및 카드 스타일 */
+.movie-grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px; 
+}
+.movie-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    overflow: hidden;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+.movie-card:hover { transform: translateY(-5px); }
+.movie-card img { width: 100%; height: auto; display: block; }
+.movie-card .movie-info { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.movie-card .rank { font-size: 1.1em; font-weight: bold; color: var(--primary-color); margin-right: 5px; }
+.movie-card h3 { display: flex; align-items: center; gap: 5px; font-size: 0.9em; margin: 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.movie-card p { font-size: 0.75em; color: var(--text-light); margin: 2px 0; }
+
+/* 날짜 선택 */
+.date-picker-container {
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    text-align: center;
+}
+.btn-secondary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* --- 3. 뉴스 페이지 스타일 --- */
+#news-screen {
+    padding-top: 60px;
+    align-items: center;
+    background-color: var(--background-light);
+}
+.news-page-container {
+    width: 100%;
+    max-width: 800px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+.news-page-container header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.news-content-box {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 30px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+.news-list { list-style: none; padding: 0; margin: 0; }
+.news-list li { padding: 20px 0; border-bottom: 1px solid #eee; transition: background-color 0.2s; }
+.news-list li:hover { background-color: #fafafa; }
+.news-list a { text-decoration: none; color: inherit; display: block; }
+.news-list .news-title { font-size: 1.1em; font-weight: bold; margin-bottom: 8px; color: #333; display: block; }
+.news-list .news-meta { font-size: 0.9em; color: #888; display: flex; justify-content: space-between; }
+.news-list .news-source { color: var(--primary-color); font-weight: bold; }
+
+
+/* 로딩 */
+.loading-spinner {
+    border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #fff;
+    border-radius: 50%; width: 40px; height: 40px;
+    animation: spin 1s linear infinite; margin: 20px auto;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+/* --- 모달 (공통) --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); 
+    display: none; 
+    justify-content: center; align-items: center; z-index: 1000;
+    opacity: 0;
+}
+.modal-content {
+    background: white; border-radius: 10px; padding: 30px;
+    width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative;
+    transform: scale(0.7);
+}
+.modal-overlay.open { display: flex; animation: modalFadeIn 0.3s forwards; }
+.modal-overlay.open .modal-content { animation: modalZoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.modal-overlay.closing { display: flex; animation: modalFadeOut 0.3s forwards; }
+.modal-overlay.closing .modal-content { animation: modalZoomOut 0.3s forwards; }
+
+
+.movie-detail-content { text-align: left; }
+.modal-body { display: flex; gap: 30px; margin-top: 10px; }
+.modal-body img { width: 250px; border-radius: 8px; }
+.modal-info { flex-grow: 1; }
+.modal-close-btn { position: absolute; top: 10px; right: 20px; font-size: 2em; cursor: pointer; }
+.btn-modal-close { background-color: #7b2cbf; color: white; border: none; padding: 10px 20px; border-radius: 5px; width: 100%; margin-top: 20px; cursor: pointer; }
+
+/* ✅ [수정] 리뷰 섹션 및 폼 스타일 대폭 수정 */
+.review-section { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
+
+/* 1. 리뷰 등록 폼 (Create) */
+#review-form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    margin-bottom: 25px; 
+}
+/* 첫 번째 줄 (작성자, 별점) */
+#review-form .form-group:first-child { 
+    display: flex; 
+    gap: 10px; 
+}
+#review-form .form-group:first-child input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+#review-form .form-group:first-child select { width: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+
+/* 두 번째 줄 (텍스트영역, 등록버튼) - 세로 배치로 변경 */
+#review-form .form-group:last-child { 
+    display: flex; 
+    flex-direction: column; /* 세로로 쌓기 */
+    gap: 10px; 
+}
+#review-form textarea { 
+    width: 100%; /* 가로 꽉 차게 */
+    height: 100px; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    resize: vertical;
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+#review-form button { 
+    width: 100%; /* 버튼도 가로 꽉 차게 */
+    height: 50px; 
+    border: none; 
+    border-radius: 5px; 
+    background-color: var(--secondary-color); /* 노란색 */
+    color: var(--text-dark);
+    font-weight: bold;
+    cursor: pointer;
+}
+#review-form button:hover { background-color: #ffda6a; }
+
+
+/* 2. 리뷰 리스트 아이템 */
+.review-item { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+.review-item-header { display: flex; justify-content: space-between; margin-bottom: 5px; color: #666; font-size: 0.9em; }
+
+.delete-review-btn { background: none; border: none; color: #aaa; font-size: 1.2em; cursor: pointer; margin-left: 5px; }
+.delete-review-btn:hover { color: #d9534f; }
+.edit-review-btn { background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.9em; font-weight: bold; }
+.edit-review-btn:hover { color: #4CAF50; }
+
+
+/* 3. 리뷰 수정 폼 (Edit) - 넓게 펼치기 */
+.review-edit-form { 
+    display: none; 
+    flex-direction: column; 
+    gap: 10px; 
+    margin-top: 15px; 
+    width: 100%; /* 전체 너비 */
+}
+
+/* 수정 텍스트 영역 */
+.review-edit-form textarea { 
+    width: 100%; /* 가로 꽉 차게 */
+    height: 80px; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+    resize: vertical;
+}
+
+/* 수정 하단부 (별점 + 버튼들) */
+.review-edit-form .form-group:last-child {
+    display: flex;
+    justify-content: space-between; /* 양쪽 끝 정렬 */
+    align-items: center;
+    width: 100%;
+}
+.review-edit-form select { padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+.review-edit-form .edit-actions button { 
+    border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 5px; 
+}
+.review-edit-form .btn-save { background-color: var(--primary-color); color: white; }
+.review-edit-form .btn-cancel { background-color: #ccc; color: #333; }
+
+
+@media (max-width: 768px) {
+    .dashboard-layout { flex-direction: column; }
+    .right-column { overflow-y: visible; }
+    .modal-body { flex-direction: column; align-items: center; }
+}
+
+
+/* --- 애니메이션 정의 (Keyframes) --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes modalZoomIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
+@keyframes modalZoomOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.7); } }
